@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dusk settings</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="brand-mark" aria-hidden="true">D</div>
+        <div>
+          <h1>Dusk</h1>
+        </div>
+      </header>
+
+      <section class="card" aria-label="Proxy settings">
+        <form id="proxy-form" novalidate>
+          <label for="proxy-url">Proxy URL</label>
+          <input
+            id="proxy-url"
+            name="proxyUrl"
+            type="url"
+            inputmode="url"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="http://127.0.0.1:8080"
+            aria-describedby="proxy-status"
+            required
+          >
+          <p id="proxy-status" class="status" role="status" aria-live="polite"></p>
+
+          <div class="actions">
+            <button class="button button-primary" type="submit">Save</button>
+            <button class="button button-secondary" id="reset-button" type="button">Reset</button>
+          </div>
+        </form>
+      </section>
+    </main>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

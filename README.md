@@ -11,6 +11,7 @@ A tiny Chrome/Edge MV3 extension for toggling the Burp proxy
 
 ## Behavior
 
-- Click the extension icon to toggle the `127.0.0.1:8080` proxy on or off.
-- Dim power icon means off; bright power icon means traffic is routed through `127.0.0.1:8080`.
+- Click the extension icon to toggle the configured proxy on or off.
+- Right-click the extension icon and choose **Options** to change the proxy URL.
+- Dim power icon means off; bright power icon means traffic is routed through the configured proxy.
 - No popup is shown.

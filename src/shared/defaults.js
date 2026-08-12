@@ -3,11 +3,7 @@ export const Modes = Object.freeze({
   proxy: "proxy"
 });
 
-export const fixedProxy = Object.freeze({
-  scheme: "http",
-  host: "127.0.0.1",
-  port: 8080
-});
+export const defaultProxyUrl = "http://127.0.0.1:8080";
 
 export const fixedBypassList = Object.freeze([
   "localhost",
@@ -17,5 +13,6 @@ export const fixedBypassList = Object.freeze([
 
 export const createDefaultState = () => ({
   mode: Modes.system,
+  proxyUrl: defaultProxyUrl,
   updatedAt: 0
 });

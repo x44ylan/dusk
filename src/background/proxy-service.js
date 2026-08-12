@@ -1,5 +1,6 @@
 import { browserApi, callApi } from "../shared/browser.js";
-import { fixedBypassList, fixedProxy, Modes } from "../shared/defaults.js";
+import { fixedBypassList, Modes } from "../shared/defaults.js";
+import { parseProxyUrl } from "../shared/proxy-url.js";
 
 const proxySettings = () => browserApi?.proxy?.settings;
 
@@ -10,11 +11,11 @@ export const createSystemConfig = () => ({
   scope: "regular"
 });
 
-export const createProxyConfig = () => ({
+export const createProxyConfig = proxyUrl => ({
   value: {
     mode: "fixed_servers",
     rules: {
-      singleProxy: fixedProxy,
+      singleProxy: parseProxyUrl(proxyUrl),
       bypassList: [...fixedBypassList]
     }
   },
@@ -22,7 +23,7 @@ export const createProxyConfig = () => ({
 });
 
 export const createProxyConfigForState = state => (
-  state.mode === Modes.proxy ? createProxyConfig() : createSystemConfig()
+  state.mode === Modes.proxy ? createProxyConfig(state.proxyUrl) : createSystemConfig()
 );
 
 export const applyProxyState = async state => {

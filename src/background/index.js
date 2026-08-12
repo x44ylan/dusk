@@ -82,3 +82,9 @@ browserApi?.runtime?.onStartup?.addListener(initialize);
 browserApi?.action?.onClicked?.addListener(() => {
   toggleProxy().catch(console.error);
 });
+
+browserApi?.runtime?.onMessage?.addListener(message => {
+  if (message?.type === "proxy-settings-updated") {
+    readState().then(applyAndSync).catch(console.error);
+  }
+});
