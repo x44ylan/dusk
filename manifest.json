@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Dusk",
   "description": "Burp proxy toggle.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "action": {
     "default_icon": {
       "16": "src/assets/dusk-off-16.png",
@@ -27,8 +27,13 @@
     "open_in_tab": true
   },
   "permissions": [
+    "contextMenus",
     "proxy",
+    "scripting",
     "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "minimum_chrome_version": "108"
 }
