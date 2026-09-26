@@ -24,6 +24,38 @@ export const createMenu = async () => {
   });
 };
 
+let clearBadgeTimer = null;
+
+// Non-injectable tabs (chrome://, Web Store, PDFs) must not fail silently:
+// flash the action badge and record the reason for diagnostics.
+const reportRenameFailure = async error => {
+  console.error("dusk rename:", error);
+
+  const session = browserApi?.storage?.session;
+
+  if (session) {
+    await callApi(session, "set", { duskLastError: String(error?.message ?? error).slice(0, 300) }).catch(() => {});
+  }
+
+  const action = browserApi?.action;
+
+  if (action?.setBadgeText) {
+    await Promise.all([
+      callApi(action, "setBadgeText", { text: "!" }),
+      callApi(action, "setBadgeBackgroundColor", { color: "#b91c1c" })
+    ]).catch(() => {});
+
+    if (clearBadgeTimer) {
+      clearTimeout(clearBadgeTimer);
+    }
+
+    clearBadgeTimer = setTimeout(() => {
+      action.setBadgeText({ text: "" });
+      clearBadgeTimer = null;
+    }, 2500);
+  }
+};
+
 export const applyTabTitle = async (tabId, title) => {
   const api = scripting();
 
@@ -72,11 +104,15 @@ export const startRenameFlow = async tabId => {
     // fall back to a blank rename
   }
 
-  await callApi(scriptingApi, "executeScript", {
-    target: { tabId },
-    func: duskShowRenameDialog,
-    args: [currentTitle]
-  });
+  try {
+    await callApi(scriptingApi, "executeScript", {
+      target: { tabId },
+      func: duskShowRenameDialog,
+      args: [currentTitle]
+    });
+  } catch (error) {
+    await reportRenameFailure(error);
+  }
 };
 
 export const handleRenameMessage = async (message, sender) => {
@@ -131,10 +167,20 @@ export const initTabRename = () => {
     createMenu().catch(console.error);
   });
 
-  menus()?.onClicked?.addListener(info => {
-    if (info.menuItemId === menuId && Number.isInteger(info.tabId)) {
-      startRenameFlow(info.tabId).catch(console.error);
+  menus()?.onClicked?.addListener((info, tab) => {
+    if (info.menuItemId !== menuId) {
+      return;
     }
+
+    // info.tabId is not reliably populated for "tab" context clicks;
+    // the tab callback parameter is the clicked tab.
+    const tabId = Number.isInteger(info.tabId) ? info.tabId : tab?.id;
+
+    if (!Number.isInteger(tabId)) {
+      return;
+    }
+
+    startRenameFlow(tabId).catch(reportRenameFailure);
   });
 
   browserApi?.runtime?.onMessage?.addListener((message, sender) => {

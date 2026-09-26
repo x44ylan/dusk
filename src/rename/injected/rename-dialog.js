@@ -117,6 +117,15 @@ export function duskShowRenameDialog(currentTitle) {
     }
   });
 
+  // Clicking anywhere on the card (except its buttons) focuses the input.
+  root.querySelector(".card").addEventListener("mousedown", event => {
+    if (event.target.closest("button")) {
+      return;
+    }
+
+    input.focus({ preventScroll: true });
+  });
+
   input.addEventListener("keydown", event => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -129,11 +138,19 @@ export function duskShowRenameDialog(currentTitle) {
     }
   });
 
-  // The tab-strip menu takes focus; reclaim it whenever the window does.
-  window.addEventListener("focus", () => input.focus({ preventScroll: true }), { once: true });
+  // The tab-strip menu leaves keyboard focus on browser UI; reclaim it
+  // whenever the window refocuses and during the first moments after opening.
+  const focusInput = () => {
+    if (host.isConnected) {
+      input.focus({ preventScroll: true });
+    }
+  };
+
+  window.addEventListener("focus", focusInput, { once: true });
+  [0, 120, 350, 800, 1600].forEach(delay => setTimeout(focusInput, delay));
 
   document.documentElement.append(host);
-  input.focus({ preventScroll: true });
+  focusInput();
 
   if (currentTitle) {
     input.select();
