@@ -12,10 +12,13 @@ A tiny Chrome/Edge MV3 extension
 ## Behavior
 
 - Click the extension icon to toggle the configured proxy on or off.
-- Right-click the extension icon and choose **Options** to change the proxy URL.
-- Right-click a tab and choose **Rename tab…** to give that tab a custom title. The rename sticks when the site rewrites its own title and survives navigation within the tab. It lasts for the browser session and dies with the tab. `Enter` saves, `Esc` cancels, and the dialog offers a reset back to the page title for renamed tabs.
-- Dim power icon means off; bright power icon means traffic is routed through the configured proxy.
-- No popup is shown.
+- Right-click the extension icon and choose **Options** to set the proxy URL.
+- Right-click a tab and choose **Rename tab…** to give it a custom title.
+- Renames survive navigation and sites rewriting their own title.
+- Renames last for the browser session and die with the tab.
+- `Enter` saves, `Esc` cancels, and renamed tabs can reset to the page title.
+- A dim power icon means off; a bright one routes traffic through the proxy.
+- No popup is ever shown; every action lives in the icon or tab menu.
 
 ## Permissions
 
