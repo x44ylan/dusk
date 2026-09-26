@@ -1,6 +1,6 @@
 # Dusk
 
-A tiny Chrome/Edge MV3 extension for toggling the Burp proxy
+A tiny Chrome/Edge MV3 extension
 
 ## Load In Chrome Or Edge
 
