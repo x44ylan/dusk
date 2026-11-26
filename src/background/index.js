@@ -2,7 +2,6 @@ import { browserApi } from "../shared/browser.js";
 import { Modes } from "../shared/defaults.js";
 import { applyProxyState } from "./proxy-service.js";
 import { readState, setMode, writeState } from "./state-store.js";
-import { initTabRename } from "../rename/service.js";
 
 const iconSizes = [16, 32, 48, 128];
 
@@ -77,8 +76,6 @@ const toggleProxy = async () => {
 };
 
 initialize();
-
-initTabRename();
 
 browserApi?.runtime?.onInstalled?.addListener(initialize);
 browserApi?.runtime?.onStartup?.addListener(initialize);
